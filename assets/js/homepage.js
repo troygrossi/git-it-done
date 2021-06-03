@@ -11,15 +11,28 @@ var getUserRepos = function (user) {
   // make a request to the url
   fetch(apiUrl)
     .then(function (response) {
+      //cathes error if request has no matching repository name
+      if (!response.ok) {
+        alert("Error: GitHub User Not Found");
+        return 0;
+      }
       return response.json();
     })
     .then(function (data) {
       displayRepos(data, user);
+    }) //cathes error if request fails to send
+    .catch(function (error) {
+      alert("Unable to connect to GitHub");
     });
 };
+
 var displayRepos = function (repos, searchTerm) {
   console.log(repos);
   console.log(searchTerm);
+  if (repos.length === 0) {
+    repoContainerEl.textContent = "No repositories found.";
+    return 0;
+  }
   // clear old content
   repoContainerEl.textContent = "";
   repoSearchTerm.textContent = searchTerm;
